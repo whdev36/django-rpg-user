@@ -3,5 +3,45 @@
 {% block title %}STATUS{% endblock %}
 
 {% block content %}
-    STATUS
+<h1 class="text-uppercase">STATUS</h1>
+<h3 class=""><i class="fi fi-rr-user"></i> User: <span class="text-muted">{{ user.username }}</span></h3>
+<div class="row bg-light p-5 border shadow">
+    <div class="col-md-4">
+        <h4>Player features:</h4>
+        <hr class="my-3">
+        <ul>
+            <li>Level: <span class="text-muted">{{ user.level }}</span></li>
+            <li>Job: <span class="text-muted">{{ user.get_job_display }}</span></li>
+            <li>Mode: <span class="text-muted">{{ user.get_mode_display }}</span></li>
+            <li>HP: <span class="text-muted">{{ user.hp }}</span></li>
+            <li>XP: <span class="text-muted">{{ user.xp }}</span></li>
+            <li>MP: <span class="text-muted">{{ user.mp }}</span></li>
+            <li>Gold: <span class="text-muted">{{ user.gold }}</span></li>
+            <li>Fatigue: <span class="text-muted">
+                {% if user.fatigue < 80 %}
+                    {{ user.fatigue }}
+                {% else %}
+                    <span class="text-danger">{{ user.fatigue }}</span>
+                {% endif %}
+            </span></li>
+            <li>STR: <span class="text-muted">{{ user.str_v }}</span></li>
+            <li>AGI: <span class="text-muted">{{ user.agi_v }}</span></li>
+            <li>PER: <span class="text-muted">{{ user.per_v }}</span></li>
+            <li>VIT: <span class="text-muted">{{ user.vit_v }}</span></li>
+            <li>INT: <span class="text-muted">{{ user.int_v }}</span></li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4>Artifacts:</h4>
+        <hr class="my-3">
+        <ul>
+            <ul>
+                {% for name, data in user.artifacts.items %}
+                <li><strong>{{ name }}</strong> - {{ data.description }}<br>Power: <code>{{ data.power }}</code>
+                </li>
+                {% endfor %}
+            </ul>
+        </ul>
+    </div>
+</div>
 {% endblock %}
