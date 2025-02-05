@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 # ----------- JOB CHOICES -----------
 class JobChoices(models.TextChoices):
-	'''A class that indicates the player's work activity.'''
+	'''A class that indicates the player's job or specialization.'''
 	INITIATE = "INITIATE", "Initiate (Beginner)"
 	WARRIOR = "WARRIOR", "Warrior (Fighter)"
 	TITAN = "TITAN", "Titan (Overcame Limits)"
@@ -24,7 +24,7 @@ class ModeChoices(models.TextChoices):
 
 # ----------- PLAYER MODEL -----------
 class Player(AbstractUser):
-	'''Player model.'''
+	'''Player model that extends the Django AbstractUser.'''
 
 	class Meta:
 		verbose_name = 'Player'
@@ -52,9 +52,18 @@ class Player(AbstractUser):
 	def __str__(self):
 		return f'{self.username} - (job: {self.get_job_display()}, level: {self.level})'
 
-	def add_artifact(name, power, description='No description'):
+	def add_artifact(self, name, power, description='No description'):
+		'''Add an artifact to the player's collection.'''
 		if not isinstance(self.artifacts, dict):
 			self.artifacts = {}
 
 		self.artifacts[name] = {'power': power, 'description': description}
 		self.save()
+
+	def remove_artifact(self, name):
+		'''Remove an artifact from the player's collection.'''
+		if name in self.artifacts:
+			del self.artifacts[name]
+			self.save()
+			return True
+		return False
