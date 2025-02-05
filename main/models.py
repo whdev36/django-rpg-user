@@ -52,6 +52,8 @@ class Player(AbstractUser):
 	def __str__(self):
 		return f'{self.username} - (job: {self.get_job_display()}, level: {self.level})'
 
+
+	# ----------- ARTIFACT -----------
 	def add_artifact(self, name, power, description='No description'):
 		'''Add an artifact to the player's collection.'''
 		if not isinstance(self.artifacts, dict):
@@ -64,6 +66,22 @@ class Player(AbstractUser):
 		'''Remove an artifact from the player's collection.'''
 		if name in self.artifacts:
 			del self.artifacts[name]
+			self.save()
+			return True
+		return False
+
+
+	# ----------- GOLD METHODS -----------
+	def add_gold(self, amount):
+		'''Increase the player's gold.'''
+		if amount > 0:
+			self.gold += amount
+			self.save()
+
+	def spend_gold(self, amount):
+		'''Decrease the player's gold if sufficient balance exists.'''
+		if 0 < amount <= self.gold:
+			self.gold -= amount
 			self.save()
 			return True
 		return False
